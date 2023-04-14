@@ -8,6 +8,7 @@ namespace xyzWebApp.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
+    // MAPIRANJE KLASA MODELA SA TABLICAMA BAZE PODATAKA
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
@@ -29,6 +30,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
 
+        // SEEDING PRVIH PODATAKA (category, product, service)
         List<Category> categories = new List<Category>()
         {
             new Category { Id = 1, Title = "Masaže"},
@@ -61,6 +63,31 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         };
 
         builder.Entity<Service>().HasData(services);
+
+        // SEEDING ULOGA (roles) I ADMINA
+        // tablica AspNetRoles -> IdentityRole
+        string adminRoleId = "7a830b98-d453-441b-bf95-f97c7b79c81c";
+        string adminRoleTitle = "Admin";
+
+        string customerRoleId = "168d01bf-f3eb-49c5-8f52-35a05304c020";
+        string customerRoleTitle = "Customer";
+
+        builder.Entity<IdentityRole>().HasData(
+                new IdentityRole()
+                {
+                    Id = adminRoleId,
+                    Name = adminRoleTitle,
+                    NormalizedName = adminRoleTitle.ToUpper()
+                },
+                new IdentityRole()
+                {
+                    Id = customerRoleId,
+                    Name = customerRoleTitle,
+                    NormalizedName = customerRoleTitle.ToUpper(),
+                }
+            );
+
+
 
     }
 }

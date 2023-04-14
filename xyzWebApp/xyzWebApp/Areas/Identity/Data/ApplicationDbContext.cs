@@ -2,11 +2,21 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using xyzWebApp.Areas.Identity.Data;
+using xyzWebApp.Models;
 
 namespace xyzWebApp.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Service> Services { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
+    public DbSet<ServiceCategory> ServiceCategories { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {

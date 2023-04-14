@@ -15,7 +15,7 @@ public class Category
 
 
     [Column(TypeName = "ntext")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
 
     [Column(TypeName = "nvarchar(200)")]

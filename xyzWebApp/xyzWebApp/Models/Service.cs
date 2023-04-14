@@ -20,12 +20,12 @@ public class Service
 
 
     [Column(TypeName = "ntext")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
 
     [Required]
     [Column(TypeName = "decimal(9,2)")]
-    public int Price { get; set; }
+    public decimal Price { get; set; }
 
 
     [Column(TypeName = "nvarchar(200)")]

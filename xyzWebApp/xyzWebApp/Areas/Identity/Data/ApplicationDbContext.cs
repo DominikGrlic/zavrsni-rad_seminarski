@@ -94,6 +94,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         string adminLastName = "Admin";
         string adminPassword = "asdasd";
         string adminAddress = "Slijepa ulica 8";
+        //string adminEmail = "admin@admin.com";
         //string adminUserName = "master_admin";                     // dodan userName za admina, ali smeta u Login-u...
 
         // hash lozinke

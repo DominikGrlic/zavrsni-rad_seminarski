@@ -12,11 +12,13 @@ namespace xyzWebApp
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ApplicationDbContext>(
+                options => options.UseSqlServer(connectionString));
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddDefaultIdentity<ApplicationUser>(
+                options => options.SignIn.RequireConfirmedAccount = false
+                ).AddRoles<IdentityRole>(      // Dodavanje uloga za korisnika -> IdentityRole <- identifikacija po ulozi
+                ).AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -40,6 +42,12 @@ namespace xyzWebApp
             app.UseAuthentication();;
 
             app.UseAuthorization();
+
+            app.MapAreaControllerRoute(
+                name: "Admin",
+                areaName: "Admin",
+                pattern: "admin/{controller}/{action}/{id?}"
+                );
 
             app.MapControllerRoute(
                 name: "default",

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using xyzWebApp.Data;
 
@@ -11,9 +12,10 @@ using xyzWebApp.Data;
 namespace xyzWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230414163959_SeedingAdminAcc")]
+    partial class SeedingAdminAcc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,14 +54,14 @@ namespace xyzWebApp.Migrations
                         new
                         {
                             Id = "7a830b98-d453-441b-bf95-f97c7b79c81c",
-                            ConcurrencyStamp = "4312759b-deb2-4382-812b-47ff0f8f384c",
+                            ConcurrencyStamp = "e7f31ee4-9b4d-4fee-964c-d94f22148a59",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "168d01bf-f3eb-49c5-8f52-35a05304c020",
-                            ConcurrencyStamp = "30aa1713-6e82-499c-a368-8cbc2059e068",
+                            ConcurrencyStamp = "e3c438f3-e85f-43e6-9ede-6d0f1be8d5c9",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -267,19 +269,19 @@ namespace xyzWebApp.Migrations
                             Id = "7023ed45-9bf9-4fb8-a7e8-30378c89d14d",
                             AccessFailedCount = 0,
                             Address = "Slijepa ulica 8",
-                            ConcurrencyStamp = "168b53e8-9e9f-4c85-b49f-0f5949f7bbee",
-                            Email = "admin@admin.com",
+                            ConcurrencyStamp = "a8406642-00db-41a6-b597-99a8427ea064",
+                            Email = "master@admin.com",
                             EmailConfirmed = false,
-                            FirstName = "Master",
-                            LastName = "Admin",
+                            FirstName = "Red",
+                            LastName = "Pill",
                             LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@ADMIN.COM",
-                            NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELgK3wB9AyRPUlEtd43fNmsH0DLk6kHUpwEH2q5//FqdEYDtkNProC4QIa15FJngAw==",
+                            NormalizedEmail = "MASTER@ADMIN.COM",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEP2eCf6x01mVL0xDnW+c3BjZ2QNCvLKkx/rwULuozZlwuUkyMiNgZ/RlWQfBJZmCRQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "23373dbd-a083-48a2-a2f7-59c580b23bdb",
+                            SecurityStamp = "4ca7e2c5-a8d6-41de-9a41-d34d117f3d28",
                             TwoFactorEnabled = false,
-                            UserName = "admin@admin.com"
+                            UserName = "admin"
                         });
                 });
 

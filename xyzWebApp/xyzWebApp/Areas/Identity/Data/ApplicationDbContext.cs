@@ -65,7 +65,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Service>().HasData(services);
 
         // SEEDING ULOGA (roles) I ADMINA
-        // tablica AspNetRoles -> IdentityRole
+        // tablica AspNetRoles -> klasa IdentityRole
         string adminRoleId = "7a830b98-d453-441b-bf95-f97c7b79c81c";
         string adminRoleTitle = "Admin";
 
@@ -87,7 +87,40 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 }
             );
 
+        // tablica AspNetUsers -> klasa ApplicationUser (izvorna "IdentityUser")
+        string adminId = "7023ed45-9bf9-4fb8-a7e8-30378c89d14d";
+        string admin = "admin@admin.com";
+        string adminFirstName = "Master";
+        string adminLastName = "Admin";
+        string adminPassword = "asdasd";
+        string adminAddress = "Slijepa ulica 8";
+        //string adminUserName = "master_admin";                     // dodan userName za admina, ali smeta u Login-u...
+
+        // hash lozinke
+        var hasher = new PasswordHasher<ApplicationUser>();
+        
+        builder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser() { 
+                    Id = adminId, 
+                    UserName = admin, 
+                    NormalizedUserName = admin.ToUpper(),
+                    Email = admin,
+                    NormalizedEmail = admin.ToUpper(),
+                    Address = adminAddress,
+                    FirstName = adminFirstName,
+                    LastName = adminLastName,
+                    PasswordHash = hasher.HashPassword(null, adminPassword)
+                }
+            );
 
 
+        // tablica AspNetUserRoles -> klasa IdentityUserRole<string> (veza izmedu Users i Roles)
+        builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>()
+                {
+                    UserId = adminId,
+                    RoleId = adminRoleId,
+                }
+            );
     }
 }

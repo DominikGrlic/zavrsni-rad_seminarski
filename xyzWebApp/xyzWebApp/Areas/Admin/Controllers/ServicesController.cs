@@ -51,6 +51,8 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // GET: Admin/Services/Create
         public IActionResult Create()
         {
+            ViewBag.ErrorMsgCtgr = TempData["ErrorMsgCtgr"] as string ?? "";
+
             return View();
         }
 
@@ -59,8 +61,16 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Sku,Title,Description,Price,Image")] Service service)
+        public async Task<IActionResult> Create([Bind("Id,Sku,Title,Description,Price,Image")] Service service,
+            int[] categoryIds)
         {
+            if(categoryIds.Length == 0 || categoryIds == null)
+            {
+                TempData["ErrorMsgCtgr"] = "Molim odaberite barem jednu kategoriju.";
+                return RedirectToAction(nameof(Create));
+            }
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(service);

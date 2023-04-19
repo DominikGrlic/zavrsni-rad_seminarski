@@ -8,6 +8,12 @@
 
 <h4>Service</h4>
 <hr />
+
+@if(!String.IsNullOrEmpty(ViewBag.ErrorMsgCtgr))
+{
+    <p class="alert-danger">@ViewBag.ErrorMsgCtgr</p>
+}
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -37,6 +43,9 @@
                 <input asp-for="Image" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
+
+            <partial name="~/Areas/Admin/Views/Shared/_CategoryDropDownPartial.cshtml" />
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

@@ -12,6 +12,7 @@ using xyzWebApp.Models;
 namespace xyzWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;

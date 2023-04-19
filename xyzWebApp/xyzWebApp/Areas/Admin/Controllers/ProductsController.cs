@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using xyzWebApp.Models;
 namespace xyzWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -49,6 +51,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // GET: Admin/Products/Create
         public IActionResult Create()
         {
+            ViewBag.ErrorMsg = TempData["ErrorMsg"] as string ?? "";
             return View();
         }
 
@@ -57,12 +60,25 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Sku,Title,Description,InStock,Price,Image")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Sku,Title,Description,InStock,Price,Image")] Product product,
+            int[] categoryIds)
         {
+            // provjera parametra categoryIds[]
+            if(categoryIds.Length == 0 || categoryIds == null)
+            {
+                // poruka za korisnika
+                TempData["ErrorMsg"] = "Molim izaberite barem jednu kategoriju.";
+                // redirect
+                return RedirectToAction(nameof(Create));
+            }
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(product);
+                //_context.Products.Add(product);          <--- jedna "od" varijanti za pisanje
                 await _context.SaveChangesAsync();
+                //_context.SaveChanges();                  <--- kada nebi koristili "async" kodiranje
                 return RedirectToAction(nameof(Index));
             }
             return View(product);

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using xyzWebApp.Areas.Identity.Data;
 using xyzWebApp.Data;
 
@@ -37,6 +38,20 @@ namespace xyzWebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // postavke aplikacije za rukovanje decimalnim vrijednostima
+            var ci = new CultureInfo("de-De");
+            ci.NumberFormat.NumberDecimalSeparator = ".";
+            ci.NumberFormat.CurrencyDecimalSeparator = ".";
+
+            app.UseRequestLocalization(
+                    new RequestLocalizationOptions
+                    {
+                        DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(ci),
+                        SupportedCultures = new List<CultureInfo> { ci },
+                        SupportedUICultures = new List<CultureInfo> { ci }
+                    }
+                );
 
             app.UseRouting();
             app.UseAuthentication();;

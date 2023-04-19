@@ -1,0 +1,15 @@
+﻿@using xyzWebApp.Data
+
+@inject ApplicationDbContext _dbContext
+
+<div class="form-group">
+    <label class="control-label">Select product categories</label>
+    <select class="form-control" name="categoryIds[]" multiple>
+        @foreach(var categoryItem in _dbContext.Categories.ToList())
+        {
+            <option value="@categoryItem.Id">
+                @categoryItem.Title
+            </option>
+        }
+    </select>
+</div>

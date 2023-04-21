@@ -52,7 +52,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
         public IActionResult Create()
         {
             ViewBag.ErrorMsg = TempData["ErrorMsg"] as string ?? "";
-            return View();
+            return View(nameof(Create));
         }
 
         // POST: Admin/Products/Create
@@ -67,21 +67,35 @@ namespace xyzWebApp.Areas.Admin.Controllers
             if(categoryIds.Length == 0 || categoryIds == null)
             {
                 // poruka za korisnika
-                TempData["ErrorMsg"] = "Molim izaberite barem jednu kategoriju.";
+                TempData["ErrorMsg"] = "Please, pick at least one category for your product.";
                 // redirect
                 return RedirectToAction(nameof(Create));
             }
 
 
+            // pohrana prizvoda u tablicu i povezivanje s odredenom kategorijom
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                //_context.Products.Add(product);          <--- jedna "od" varijanti za pisanje
+                _context.Products.Add(product);
+                //_context.Products.Add(product);          <--- jedna "od" varijanti za dodavanje u bazu
                 await _context.SaveChangesAsync();
                 //_context.SaveChanges();                  <--- kada nebi koristili "async" kodiranje
-                return RedirectToAction(nameof(Index));
+                
+
+
+                // povezivanje product.Id sa categoryIds
+                foreach(var categoryId in categoryIds)
+                {
+                    ProductCategory productCategory = new ProductCategory();
+                    productCategory.CategoryId = categoryId;
+                    productCategory.ProductId = product.Id;
+
+                    _context.ProductCategories.Add(productCategory);
+                }
+
+                await _context.SaveChangesAsync();
             }
-            return View(product);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Admin/Products/Edit/5

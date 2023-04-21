@@ -53,7 +53,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
         {
             ViewBag.ErrorMsgCtgr = TempData["ErrorMsgCtgr"] as string ?? "";
 
-            return View();
+            return View(nameof(Create));
         }
 
         // POST: Admin/Services/Create
@@ -66,18 +66,29 @@ namespace xyzWebApp.Areas.Admin.Controllers
         {
             if(categoryIds.Length == 0 || categoryIds == null)
             {
-                TempData["ErrorMsgCtgr"] = "Molim odaberite barem jednu kategoriju.";
+                TempData["ErrorMsgCtgr"] = "Please, pick at least one category for your service.";
                 return RedirectToAction(nameof(Create));
             }
 
 
             if (ModelState.IsValid)
             {
-                _context.Add(service);
+                _context.Services.Add(service);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                
+
+                foreach(var categoryId in categoryIds)
+                {
+                    ServiceCategory serviceCategory = new ServiceCategory();
+                    serviceCategory.CategoryId = categoryId;
+                    serviceCategory.ServiceId = service.Id;
+
+                    _context.ServiceCategories.Add(serviceCategory);
+                }
+
+                await _context.SaveChangesAsync();
             }
-            return View(service);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Admin/Services/Edit/5

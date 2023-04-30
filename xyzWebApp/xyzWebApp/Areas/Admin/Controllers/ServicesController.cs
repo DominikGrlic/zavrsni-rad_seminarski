@@ -62,7 +62,8 @@ namespace xyzWebApp.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Sku,Title,Description,Price,Image")] Service service,
-            int[] categoryIds)
+            int[] categoryIds,
+            IFormFile Image)
         {
             if(categoryIds.Length == 0 || categoryIds == null)
             {
@@ -73,7 +74,26 @@ namespace xyzWebApp.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Services.Add(service);
+                try
+                {
+                    // spremanje slike, njenog naziva i putanje kod kreiranja nove usluge
+                    var imageName = Image.FileName.ToLower();
+                    var saveImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/services", imageName);
+
+                    Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+
+                    using (var stream = new FileStream(saveImagePath, FileMode.Create))
+                        Image.CopyTo(stream);
+
+                    service.Image = imageName;
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMsg"] = ex.Message;
+                    return RedirectToAction(nameof(Create));
+                }
+
+                    _context.Services.Add(service);
                 await _context.SaveChangesAsync();
                 
 
@@ -112,11 +132,18 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Sku,Title,Description,Price,Image")] Service service)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Sku,Title,Description,Price,Image")] Service service, 
+            IFormFile? newImage,
+            int[] categoryIds)
         {
             if (id != service.Id)
             {
                 return NotFound();
+            }
+            if(categoryIds.Length == 0)
+            {
+                TempData["ErrorMsg"] = "Please pick one category!";
+                return RedirectToAction(nameof(Edit), new { id = id });
             }
 
             if (ModelState.IsValid)
@@ -125,6 +152,27 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 {
                     _context.Update(service);
                     await _context.SaveChangesAsync();
+
+                    if(newImage != null)                        
+                    {
+                        var newImageName = DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_" +
+                            newImage.FileName.ToLower().Replace("", "_");               // spremamo unikatan naziv slike
+                        
+                        var saveImagePath = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot/images/services",                                  // stvaramo direktorij slike, ako ne postoji
+                            newImageName
+                            );
+
+                        Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+
+                        using (var stream = new FileStream(saveImagePath, FileMode.Create))
+                        {
+                            newImage.CopyTo(stream);
+                        }
+
+                        service.Image = newImageName;
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

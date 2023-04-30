@@ -93,7 +93,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         string adminFirstName = "Master";
         string adminLastName = "Admin";
         string adminPassword = "asdasd";
-        string adminAddress = "Slijepa ulica 8";
+        //string adminAddress = "Slijepa ulica 8";
         //string adminEmail = "admin@admin.com";
         //string adminUserName = "master_admin";                     // dodan userName za admina, ali smeta u Login-u...
 
@@ -107,7 +107,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                     NormalizedUserName = admin.ToUpper(),
                     Email = admin,
                     NormalizedEmail = admin.ToUpper(),
-                    Address = adminAddress,
+                    //Address = adminAddress,
                     FirstName = adminFirstName,
                     LastName = adminLastName,
                     PasswordHash = hasher.HashPassword(null, adminPassword)

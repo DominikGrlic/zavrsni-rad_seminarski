@@ -61,7 +61,8 @@ namespace xyzWebApp.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Sku,Title,Description,InStock,Price,Image")] Product product,
-            int[] categoryIds)
+            int[] categoryIds,
+            IFormFile Image)
         {
             // provjera parametra categoryIds[]
             if(categoryIds.Length == 0 || categoryIds == null)
@@ -76,6 +77,35 @@ namespace xyzWebApp.Areas.Admin.Controllers
             // pohrana prizvoda u tablicu i povezivanje s odredenom kategorijom
             if (ModelState.IsValid)
             {
+                // spremanje slike na disk i naziva slike u product.Image
+                try
+                {
+                    var imageName = Image.FileName.ToLower();
+
+                    // putanja pohrane slike
+                    // rezultat: /wwwroot/images/products/naziv-slike.jpg
+                    var saveImagePath = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot/images/products",
+                            imageName
+                        );
+
+                    // kreiraj direktorije unutar putanje
+                    Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+                    // kopiranje datoteke unutar putanje
+                    using (var stream = new FileStream(saveImagePath, FileMode.Create))
+                    {
+                        Image.CopyTo(stream);
+                    }
+
+                    product.Image = imageName;
+                }
+                catch(Exception ex)
+                {
+                    TempData["ErrorMsg"] = ex.Message;
+                    return RedirectToAction(nameof(Create));
+                }
+
                 _context.Products.Add(product);
                 //_context.Products.Add(product);          <--- jedna "od" varijanti za dodavanje u bazu
                 await _context.SaveChangesAsync();
@@ -119,11 +149,18 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Sku,Title,Description,InStock,Price,Image")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Sku,Title,Description,InStock,Price,Image")] Product product, 
+            IFormFile? newImage,
+            int[] categoryIds)
         {
             if (id != product.Id)
             {
                 return NotFound();
+            }
+            if(categoryIds.Length == 0)
+            {
+                TempData["ErrorMsg"] = "Molim odaberite jednu kategoriju!";
+                return RedirectToAction(nameof(Edit), new { id = id });
             }
 
             if (ModelState.IsValid)
@@ -132,6 +169,45 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 {
                     _context.Update(product);
                     await _context.SaveChangesAsync();
+
+                    if(newImage != null)
+                    {
+                        var newImageName = DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_" +
+                            newImage.FileName.ToLower().Replace(" ", "_");
+
+                        var saveImagePath = Path.Combine(
+                                Directory.GetCurrentDirectory(),
+                                "wwwroot/images/products",
+                                newImageName
+                            );
+
+                        Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+                        
+                        using(var stream = new FileStream(saveImagePath, FileMode.Create))
+                        {
+                            newImage.CopyTo(stream);
+                        }
+
+                        product.Image = newImageName;
+
+                    }
+
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+
+                    _context.ProductCategories.RemoveRange(_context.ProductCategories.Where(a=>a.ProductId == id));
+                    _context.SaveChanges();
+
+                    foreach(var category in categoryIds)
+                    {
+                        ProductCategory productCategory = new ProductCategory();
+                        productCategory.ProductId = product.Id;
+                        productCategory.CategoryId = category;
+
+                        _context.Add(productCategory);
+                    }
+
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {

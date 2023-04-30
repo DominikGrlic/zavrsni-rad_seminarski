@@ -17,9 +17,5 @@ public class ApplicationUser : IdentityUser
     [Required]
     [StringLength(50)]
     public string LastName { get; set; }
-
-    [Required]
-    [StringLength(200)]
-    public string Address { get; set; }
 }
 

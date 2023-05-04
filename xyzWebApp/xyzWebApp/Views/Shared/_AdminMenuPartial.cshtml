@@ -14,16 +14,19 @@
     {
         <div class="dropdown">
             <a class="btn nav-link dropdown-toggle" id="dropdownAdmin" data-bs-toggle ="dropdown">Admin menu</a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu bg-dark">
                 <li>
-                    <a class="dropdown-item" type="button" asp-area="Admin" asp-controller="Categories" asp-action="Index">
-                        Categories
-                    </a>
-                    <a class="dropdown-item" type="button" asp-area="Admin" asp-controller="Products" asp-action="Index">
+                    <a class="dropdown-item bg-dark text-white" type="button" asp-area="Admin" asp-controller="Products" asp-action="Index">
                         Products
                     </a>
-                    <a class="dropdown-item" type="button" asp-area="Admin" asp-controller="Services" asp-action="Index">
+                    <a class="dropdown-item bg-dark text-white" type="button" asp-area="Admin" asp-controller="Services" asp-action="Index">
                         Services
+                    </a>
+                    <a class="dropdown-item bg-dark text-white" type="button" asp-area="Admin" asp-controller="Categories" asp-action="Index">
+                        Categories
+                    </a>
+                    <a class="dropdown-item bg-dark text-white" type="button" asp-area="Admin" asp-controller="Users" asp-action="Index">
+                        User manager
                     </a>
                 </li>
             </ul>

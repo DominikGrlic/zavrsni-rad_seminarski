@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<ServiceCategory> ServiceCategories { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
+    //public DbSet<User> User { get; set; }                 // ------------------------------------ //
     
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -89,13 +90,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
         // tablica AspNetUsers -> klasa ApplicationUser (izvorna "IdentityUser")
         string adminId = "7023ed45-9bf9-4fb8-a7e8-30378c89d14d";
-        string adminEmail = "admin@admin.com";
+        string admin = "admin@admin.com";
         string adminFirstName = "Master";
         string adminLastName = "Admin";
         string adminPassword = "asdasd";
         //string adminAddress = "Slijepa ulica 8";
         //string adminEmail = "admin@admin.com";
-        string adminUserName = "master_admin";                     // dodan userName za admina, ali smeta u Login-u...
+        //string adminUserName = "master_admin";                     // dodan userName za admina, ali smeta u Login-u...
 
         // hash lozinke
         var hasher = new PasswordHasher<ApplicationUser>();
@@ -103,10 +104,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ApplicationUser>().HasData(
                 new ApplicationUser() { 
                     Id = adminId, 
-                    UserName = adminUserName, 
-                    NormalizedUserName = adminUserName.ToUpper(),
-                    Email = adminEmail,
-                    NormalizedEmail = adminEmail.ToUpper(),
+                    UserName = admin, 
+                    NormalizedUserName = admin.ToUpper(),
+                    Email = admin,
+                    NormalizedEmail = admin.ToUpper(),
                     //Address = adminAddress,
                     FirstName = adminFirstName,
                     LastName = adminLastName,

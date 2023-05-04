@@ -143,7 +143,7 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
                     if(customerRole != null)
                     {
                         await _userManager.AddToRoleAsync(user, customerRole.Name);           // ako postoji "Customer" rola, tamo dodaj 
-                    }                                                                         //  -->  ovog trenutnog usera  <--
+                    }                                                                         //  -->  ovog trenutnog(novog) usera  <--
 
                     _logger.LogInformation("User created a new account with password.");
 

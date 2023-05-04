@@ -12,7 +12,7 @@ using xyzWebApp.Models;
 namespace xyzWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ServicesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -156,7 +156,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                     if(newImage != null)                        
                     {
                         var newImageName = DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_" +
-                            newImage.FileName.ToLower().Replace("", "_");               // spremamo unikatan naziv slike
+                            newImage.FileName.ToLower().Replace(" ", "_");               // spremamo unikatan naziv slike
                         
                         var saveImagePath = Path.Combine(
                             Directory.GetCurrentDirectory(),

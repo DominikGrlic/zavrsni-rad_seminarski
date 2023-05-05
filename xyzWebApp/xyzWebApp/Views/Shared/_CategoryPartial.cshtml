@@ -1,0 +1,18 @@
+﻿@using xyzWebApp.Areas.Identity.Data
+@using xyzWebApp.Data
+
+@inject ApplicationDbContext _context
+
+<div class="dropdown">
+    <a class="btn nav-link dropdown-toggle text-secondary" id="categoryDropdown" data-bs-toggle="dropdown">Categories</a>
+    <ul class="dropdown-menu bg-dark">
+        <li>
+            @foreach(var cat in _context.Categories.ToList())
+            {
+                <a class="dropdown-item bg-dark text-white" type="button" asp-action="ProductsByCategories" asp-route-id="@cat.Id">
+                    @cat.Title
+                </a>
+            }
+        </li>
+    </ul>
+</div>

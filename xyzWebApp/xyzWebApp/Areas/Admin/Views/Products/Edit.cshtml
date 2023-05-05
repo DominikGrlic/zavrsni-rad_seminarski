@@ -4,6 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
+@if(!String.IsNullOrEmpty(ViewBag.ErrorMsg))
+{
+    <p class="font-monospace alert-dark">@ViewBag.ErrorMsg</p>
+}
+
 <h1 class="font-monospace">Edit</h1>
 
 <h4 class="font-monospace">Product</h4>

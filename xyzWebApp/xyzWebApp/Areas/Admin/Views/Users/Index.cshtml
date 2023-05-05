@@ -1,6 +1,9 @@
-﻿@using xyzWebApp.Areas.Identity.Data;
+﻿@model IEnumerable<ApplicationUser>
 
-@model IEnumerable<ApplicationUser>
+@using xyzWebApp.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<ApplicationUser> _userManager
 
 <h1 class="text font-monospace">All Users</h1>
 <a asp-action="Create" class="btn btn-secondary font-monospace">Create a User</a>
@@ -10,6 +13,7 @@
 <table class="table table-dark table-hover font-monospace">
     <tr class="text-center">
         <th>ID</th>
+        @*<th>User role</th>*@
         <th>User name</th>
         <th>Email</th>
         <th>First name</th>
@@ -20,13 +24,17 @@
     {
         <tr class="text-center">
             <td>@user.Id</td>
+            @*<td>@user.Role</td>*@
             <td>@user.UserName</td>
             <td>@user.Email</td>
             <td>@user.FirstName</td>
             <td>@user.LastName</td>
             <td>
                 <a class="btn btn-secondary" asp-action="Update" asp-route-id="@user.Id">Update</a>
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                <form>                  @*method="post" asp-action="Delete"  asp-route-id="@user.Id"*@
+                    <button class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</button>      @*type="submit"  asp-action="Delete"*@
+                </form>
+                
             </td>
         </tr>
     }

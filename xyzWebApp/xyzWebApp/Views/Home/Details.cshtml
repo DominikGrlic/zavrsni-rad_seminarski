@@ -1,0 +1,34 @@
+﻿@model xyzWebApp.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="font-monospace">Details</h1>
+
+<div class="container overflow-hidden">
+    <div class="row gx-5">
+        <div class="col">
+            <div class="p-3 border bg-dark text-white">
+                <dl class="row font-monospace">
+                    <dt>Name of the product:</dt>
+                    <dd>@Model.Title</dd>
+                    <dt>Desription:</dt>
+                    <dd>@Model.Description</dd>
+                    <dt>Price:</dt>
+                    <dd>@Model.Price</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="col">
+            <div class="p-3 bg-white">
+                <img src="~/images/products/@Html.DisplayFor(model => model.Image)" width="350" height="300" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a class="font-monospace" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a class="font-monospace" asp-action="Index">Back to List</a>
+</div>

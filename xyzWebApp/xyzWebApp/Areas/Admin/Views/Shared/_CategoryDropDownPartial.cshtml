@@ -3,7 +3,7 @@
 @inject ApplicationDbContext _dbContext
 
 <div class="form-group">
-    <label class="control-label">Select product categories</label>
+    <label class="control-label">Category</label>
     <select class="form-control" name="categoryIds[]" multiple>
         @foreach(var categoryItem in _dbContext.Categories.ToList())
         {

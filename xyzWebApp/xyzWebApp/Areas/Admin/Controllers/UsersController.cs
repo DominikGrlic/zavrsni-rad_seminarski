@@ -24,22 +24,16 @@ namespace xyzWebApp.Areas.Admin.Controllers
         }
 
         // GET: UsersController
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View(_userManager.Users.ToList());
-        }
-
-        // GET: UsersController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: UsersController/Create
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.ErrorMsg = TempData["ErrorMsg"];
+            //ViewBag.ErrorMsg = TempData["ErrorMsg"];
             return View();
         }
 
@@ -59,6 +53,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 };
 
                 var newUser = await _userManager.CreateAsync(appUser, user.Password);
+                newUser = await _userManager.AddToRoleAsync(appUser, "Customer");
 
                 if (newUser.Succeeded)
                     return RedirectToAction("Index");
@@ -88,7 +83,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // POST: UsersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(string id, string email, string password, string firstName, string lastName)
+        public async Task<IActionResult> Update(string id, string email, string password, string firstName, string lastName, int roles)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
 
@@ -114,7 +109,25 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 else
                     ModelState.AddModelError("", "Enter last name");
 
-                if(!String.IsNullOrEmpty(email) && !String.IsNullOrEmpty(password) && !String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
+                if(roles != 0)
+                {
+                    if (roles == 2)
+                        await _userManager.AddToRoleAsync(user, "Admin");
+
+
+                    else if (roles == 1)
+                        await _userManager.AddToRoleAsync(user, "Customer");
+
+                    else
+                        ModelState.AddModelError("", "User role can't be recognised!");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid user role!");
+                }
+
+
+                if(!String.IsNullOrEmpty(email) && !String.IsNullOrEmpty(password) && !String.IsNullOrEmpty(firstName) && !                 String.IsNullOrEmpty(lastName))
                 {
                     var result = await _userManager.UpdateAsync(user);
 
@@ -137,24 +150,49 @@ namespace xyzWebApp.Areas.Admin.Controllers
         }
 
         // GET: UsersController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            return View();
+            
+
+            if(id == null || _userManager.Users == null)
+            {
+                return NotFound();
+            }
+
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
         }
 
         // POST: UsersController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            try
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
+
+            if(user != null )
             {
-                return RedirectToAction(nameof(Index));
+                var result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                    return RedirectToAction("Index");
+
+                else
+                {
+                    foreach (IdentityError error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
+                }
             }
-            catch
-            {
-                return View();
-            }
+
+            else
+                ModelState.AddModelError("", "User not found!");
+
+            return RedirectToAction("Index");
         }
     }
 }

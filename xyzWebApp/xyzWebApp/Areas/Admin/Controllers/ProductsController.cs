@@ -62,7 +62,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Sku,Title,Description,InStock,Price,Image")] Product product,
             int[] categoryIds,
-            IFormFile Image)
+            IFormFile? Image)
         {
             // provjera parametra categoryIds[]
             if(categoryIds.Length == 0 || categoryIds == null)
@@ -77,36 +77,39 @@ namespace xyzWebApp.Areas.Admin.Controllers
             // pohrana prizvoda u tablicu i povezivanje s odredenom kategorijom
             if (ModelState.IsValid)
             {
-                // spremanje slike na disk i naziva slike u product.Image
-                try
+                if(Image != null)
                 {
-                    var imageName = Image.FileName.ToLower();
-
-                    // putanja pohrane slike
-                    // rezultat: /wwwroot/images/products/naziv-slike.jpg
-                    var saveImagePath = Path.Combine(
-                            Directory.GetCurrentDirectory(),
-                            "wwwroot/images/products",
-                            imageName
-                        );
-
-                    // kreiraj direktorije unutar putanje
-                    Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
-                    // kopiranje datoteke unutar putanje
-                    using (var stream = new FileStream(saveImagePath, FileMode.Create))
+                    // spremanje slike na disk i naziva slike u product.Image
+                    try
                     {
-                        Image.CopyTo(stream);
+                        var imageName = Image.FileName.ToLower();
+
+                        // putanja pohrane slike
+                        // rezultat: /wwwroot/images/products/naziv-slike.jpg
+                        var saveImagePath = Path.Combine(
+                                Directory.GetCurrentDirectory(),
+                                "wwwroot/images/products",
+                                imageName
+                            );
+
+                        // kreiraj direktorije unutar putanje
+                        Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+                        // kopiranje datoteke unutar putanje
+                        using (var stream = new FileStream(saveImagePath, FileMode.Create))
+                        {
+                            Image.CopyTo(stream);
+                        }
+
+                        product.Image = imageName;
                     }
-
-                    product.Image = imageName;
-                }
-                catch(Exception ex)
-                {
-                    TempData["ErrorMsg"] = ex.Message;
-                    return RedirectToAction(nameof(Create));
+                    catch (Exception ex)
+                    {
+                        TempData["ErrorMsg"] = ex.Message;
+                        return RedirectToAction(nameof(Create));
+                    }
                 }
 
-                _context.Products.Add(product);
+                _context.Add(product);
                 //_context.Products.Add(product);          <--- jedna "od" varijanti za dodavanje u bazu
                 await _context.SaveChangesAsync();
                 //_context.SaveChanges();                  <--- kada nebi koristili "async" kodiranje
@@ -141,6 +144,8 @@ namespace xyzWebApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.ErrorMsg = TempData["ErrorMsg"] as string ?? "";
             return View(product);
         }
 
@@ -159,7 +164,8 @@ namespace xyzWebApp.Areas.Admin.Controllers
             }
             if(categoryIds.Length == 0)
             {
-                TempData["ErrorMsg"] = "Molim odaberite jednu kategoriju!";
+                
+                TempData["ErrorMsg"] = "Please, pick at least one category.";
                 return RedirectToAction(nameof(Edit), new { id = id });
             }
 
@@ -233,8 +239,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -255,6 +260,20 @@ namespace xyzWebApp.Areas.Admin.Controllers
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
+                if(!String.IsNullOrWhiteSpace(product.Image))       // uvjet zaduzen za provjeru ako postoji slika vezana
+                {                                                   // za proizvod. Ako ona postoji ovdje se brise.
+                    var delPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), 
+                        "wwwroot/images/products", 
+                        product.Image
+                        );
+
+                    if(System.IO.File.Exists(delPath))
+                    {
+                        System.IO.File.Delete(delPath);
+                    }
+                }
+
                 _context.Products.Remove(product);
             }
             

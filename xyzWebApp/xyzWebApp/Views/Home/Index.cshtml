@@ -1,59 +1,63 @@
-﻿@model List<xyzWebApp.Models.Product>
+﻿@model IEnumerable<xyzWebApp.Models.Product>
 
 @{
-    ViewData["Title"] = "Naslov";
-    ViewData["Desc"] = "Podnaslov";
+    ViewData["Title"] = "Welcome";
+    ViewData["Services"] = "U can see our services also, by pressing the button below.";
 }
 
 <div class="text-center">
-    <h1>@ViewData["Title"]</h1>
-    <h4>@ViewData["Desc"]</h4>
+    <h2 class="font-monospace">@ViewData["Title"]</h2>
+    <h3 class="font-monospace">@ViewData["Services"]</h3>
 </div>
 
-<div class="row">
-    <form method="get" asp-area="" asp-controller="Home" asp-action="Index">
-        <div class="col-5">
-            <input type="text" class="form-control" name="srchTab" />
-        </div>
-        <div class="col-3">
-            <select class="form-select" name="srchPar">
-                <option value="0">Default</option>
-                <option value="1">Price min - max</option>
-                <option value="2">Price max - min</option>
-            </select>
-        </div>
-        <div class="col-3">
-
-        </div>
-        <div class="col-1">
-
-        </div>
-        
-        <input type="submit" class="btn btn-success" value="Search..." />
-    </form>
+<div class="d-grid gap-2 col-6 mx-auto">
+    <button class="btn btn-dark font-monospace" type="button">Services</button>
 </div>
+
+<hr />
+
+<form method="get" asp-area="" asp-controller="Home" asp-action="Index" class="row mb-5">
+    <div class="col-5">
+        <input type="text" class="form-control" name="srchTab" />
+    </div>
+    <div class="col-3">
+        <select class="form-select" name="srchPar">
+            <option value="0">Default</option>
+            <option value="3">Title A - Z</option>
+            <option value="4">Title Z - A</option>
+            <option value="1">Price min - max</option>
+            <option value="2">Price max - min</option>
+        </select>
+    </div>
+    <div class="col-3">
+        <select class="form-select" id="floatingSelect" name="categoryId">
+            <option selected value="0">All Categories</option>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <option value="@category.Id">@category.Title</option>
+            }
+        </select>
+    </div>
+    <div class="col-1">
+        <input type="submit" class="btn btn-success" value="Search" />
+    </div>  
+</form>
+
 
 <div class="row">
     @foreach(var item in Model)
     {
-        <div class="card-deck col-4 mb-1">
-            <div class="card mb-3" style="max-width: 540px;">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        @{
-                            string img = !String.IsNullOrEmpty(item.Image) ? "/images/products/" + item.Image : "/images/default.jpg";
-                        }
-                        <img src="@img" class="img-fluid rounded-start" alt="...">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Title</h5>
-                            <p class="card-text">@item.Description</p>
-                            <p class="card-text">@item.Price.ToString("C2")</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="card col-3 mb-1">
+            @{
+                string img = !String.IsNullOrEmpty(item.Image) ? "/images/products/" + item.Image : "/images/default.jpg";
+            }
+            <img src="@img" class="img-fluid rounded-start" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@item.Title</h5>
+                @*<p class="card-text">@item.Description</p>*@
+                <p class="card-text">@item.Price.ToString("C2")</p>
+                <a class="btn btn-dark" asp-action="Details" asp-route-id="@item.Id">Details</a>
             </div>
-        </div>
+        </div> 
     }
 </div>

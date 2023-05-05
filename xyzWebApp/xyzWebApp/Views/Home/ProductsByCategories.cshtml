@@ -1,0 +1,45 @@
+﻿@model List<xyzWebApp.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<table class="table table-hover font-monospace text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.InStock)
+            </th>*@
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.InStock)
+                </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

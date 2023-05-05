@@ -59,12 +59,41 @@ namespace xyzWebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Image")] Category category)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,Image")] Category category,
+            IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
+                if(Image != null)
+                {
+                    try
+                    {
+                        var imageName = Image.FileName.ToLower();
+
+                        var saveImagePath = Path.Combine(
+                            Directory.GetCurrentDirectory(), 
+                            "wwwrott/images/categories", 
+                            imageName
+                            );
+
+                        Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+
+                        using (var stream = new FileStream(saveImagePath, FileMode.Create))
+                        {
+                            Image.CopyTo(stream);
+                        }
+
+                        category.Image = imageName;
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError("", ex.Message);
+                    }
+                }
+
                 _context.Add(category);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(category);

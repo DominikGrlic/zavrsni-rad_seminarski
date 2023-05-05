@@ -124,6 +124,9 @@ namespace xyzWebApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.ErrorMsg = TempData["ErrorMsg"];
+
             return View(service);
         }
 
@@ -220,6 +223,20 @@ namespace xyzWebApp.Areas.Admin.Controllers
             var service = await _context.Services.FindAsync(id);
             if (service != null)
             {
+                if(!String.IsNullOrEmpty(service.Image))
+                {
+                    var delPath = Path.Combine(
+                        Directory.GetCurrentDirectory(), 
+                        "wwwroot/images/services", 
+                        service.Image
+                        );
+
+                    if(System.IO.File.Exists(delPath))
+                    {
+                        System.IO.File.Delete(delPath);
+                    }
+                }
+
                 _context.Services.Remove(service);
             }
             

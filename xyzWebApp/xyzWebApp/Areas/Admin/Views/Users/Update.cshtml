@@ -1,4 +1,9 @@
-﻿@model xyzWebApp.Areas.Identity.Data.ApplicationUser;
+﻿@model xyzWebApp.Areas.Identity.Data.ApplicationUser
+
+@using Microsoft.AspNetCore.Identity
+@using xyzWebApp.Areas.Identity.Data
+
+@inject UserManager<ApplicationUser> _userManager
 
 @{
     ViewData["Title"] = "UPDATE USER";
@@ -33,5 +38,14 @@
         <label for="password">Password</label>
         <input name="password" class="form-control" />
     </div>
+    <hr />
+    <div class="form-group font-monospace">
+        <select class="form-select form-select-sm" aria-label=".form-select-sm example" name="roles">
+            <option value="0">PICK A ROLE...</option>
+            <option value="1">Customer</option>
+            <option value="2">Administrator</option>
+        </select>
+    </div>
+    <hr />
     <button type="submit" class="btn btn-primary font-monospace">Save</button>
 </form>

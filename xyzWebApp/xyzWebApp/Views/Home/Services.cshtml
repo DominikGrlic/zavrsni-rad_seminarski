@@ -1,25 +1,25 @@
-﻿@model IEnumerable<xyzWebApp.Models.Product>
+﻿@model IEnumerable<xyzWebApp.Models.Service>
 
 @{
     ViewData["Title"] = "Welcome";
-    ViewData["Services"] = "Check out our services list!";
+    ViewData["Products"] = "Check out our products list!";
 }
 
 <div class="text-center">
-    <h3 class="font-monospace">@ViewData["Services"]</h3>
+    <h3 class="font-monospace">@ViewData["Products"]</h3>
 </div>
 
 <div class="d-grid gap-2 col-6 mx-auto">
-    <a class="btn btn-dark font-monospace fs-6" asp-area="" asp-controller="Home" asp-action="Services">Services</a>
+    <a class="btn btn-dark font-monospace" type="button" asp-area="" asp-controller="Home" asp-action="Index">Products</a>
 </div>
 
 <hr />
 
-<form method="get" asp-area="" asp-controller="Home" asp-action="Index" class="row mb-5">
-    <div class="col-6">
+<form method="get" asp-area="" asp-controller="Home" asp-action="Services" class="row mb-5">
+    <div class="col-7">
         <input type="text" class="form-control" name="srchTab" />
     </div>
-    <div class="col-4">
+    <div class="col-3">
         <select class="form-select" name="srchPar">
             <option value="0">Default</option>
             <option value="3">Title A - Z</option>
@@ -30,23 +30,22 @@
     </div>
     <div class="col-2">
         <input type="submit" class="btn btn-warning" value="Search" />
-    </div>  
+    </div>
 </form>
 
-
 <div class="row">
-    @foreach(var item in Model)
+    @foreach (var item in Model)
     {
         <div class="card col-3 mb-1">
             @{
-                string img = !String.IsNullOrEmpty(item.Image) ? "/images/products/" + item.Image : "/images/default.jpg";
+                string img = !String.IsNullOrEmpty(item.Image) ? "/images/services/" + item.Image : "/images/default.jpg";
             }
             <img src="@img" class="img-fluid rounded-start" alt="...">
             <div class="card-body">
                 <h5 class="card-title">@item.Title</h5>
                 <p class="card-text">@item.Price.ToString("C2")</p>
-                <a class="btn btn-dark btn-lg" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                <a class="btn btn-dark btn-lg" asp-action="ServiceDetails" asp-route-id="@item.Id">Details</a>
             </div>
-        </div> 
+        </div>
     }
 </div>

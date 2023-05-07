@@ -6,49 +6,28 @@
 
 <h1 class="font-monospace">Details</h1>
 
-<div>
-    <h4 class="font-monospace">Product</h4>
-    <hr />
-    <dl class="row font-monospace">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sku)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sku)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InStock)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InStock)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class = "col-sm-10">
-            <img src="~/images/products/@Html.DisplayFor(model => model.Image)" width="350" height="300" />
-        </dd>
-    </dl>
+<div class="container overflow-hidden">
+    <div class="row gx-5">
+        <div class="col">
+            <div class="p-3 border bg-dark text-white">
+                <dl class="row font-monospace">
+                    <dt class="fs-5">Name of the product:</dt>
+                    <dd class="fs-7">@Model.Title</dd>
+                    <dt class="fs-5">Desription:</dt>
+                    <dd class="fs-7">@Model.Description</dd>
+                    <dt class="fs-5">Price:</dt>
+                    <dd class="fs-7">@Model.Price</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="col">
+            <div class="p-3 bg-white">
+                <img src="~/images/products/@Html.DisplayFor(model => model.Image)" width="450" height="600" />
+            </div>
+        </div>
+    </div>
 </div>
+
 <div>
-    <a class="font-monospace" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a class="font-monospace" asp-action="Index">Back to List</a>
+    <a class="btn btn-dark font-monospace" asp-action="Index">Back to List</a>
 </div>

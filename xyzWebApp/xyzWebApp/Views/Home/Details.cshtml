@@ -22,13 +22,12 @@
         </div>
         <div class="col">
             <div class="p-3 bg-white">
-                <img src="~/images/products/@Html.DisplayFor(model => model.Image)" width="350" height="300" />
+                <img src="~/images/products/@Html.DisplayFor(model => model.Image)" width="450" height="600" />
             </div>
         </div>
     </div>
 </div>
 
 <div>
-    <a class="font-monospace" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a class="font-monospace" asp-action="Index">Back to List</a>
+    <a class="btn btn-dark font-monospace" asp-action="Index">Back to List</a>
 </div>

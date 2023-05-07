@@ -4,42 +4,25 @@
     ViewData["Title"] = "Index";
 }
 
-<table class="table table-hover font-monospace text-center">
-    <thead class="table-dark">
-        <tr>
-            <th>
-                Title
-            </th>
-            <th>
-                Description
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.InStock)
-            </th>*@
-            <th>
-                Price
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.InStock)
-                </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+@if(!String.IsNullOrEmpty(ViewBag.EmptyList))
+{
+    <h2>@ViewBag.EmptyList</h2>
+}
 
+<div class="row">
+    @foreach (var item in Model)
+    {
+            <div class="card col-3 mb-1">
+            @{
+                string img = !String.IsNullOrEmpty(item.Image) ? "/images/products/" + item.Image : "/images/default.jpg";
+            }
+                <img src="@img" class="img-fluid rounded-start" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                @*<p class="card-text">@item.Description</p>*@
+                    <p class="card-text">@item.Price.ToString("C2")</p>
+                    <a class="btn btn-dark btn-lg" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                </div>
+            </div> 
+    }
+</div>

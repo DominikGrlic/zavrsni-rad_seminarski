@@ -1,0 +1,43 @@
+﻿@model xyzWebApp.Areas.Identity.Data.ApplicationUser
+
+@using Microsoft.AspNetCore.Identity
+@using xyzWebApp.Areas.Identity.Data
+
+@inject UserManager<ApplicationUser> _userManager;
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="font-monospace">Details</h1>
+
+<div class="container overflow-hidden">
+    <div class="row gx-5">
+        <div class="col">
+            <div class="p-3 border bg-dark text-white">
+                <dl class="row font-monospace">
+                    <dt class="fs-4">Id:</dt>
+                    <dd class="fs-6">@Model.Id</dd>
+                    <dt class="fs-4">Role:</dt>
+                    <dd class="fs-6">
+                        @{
+                        foreach(var role in await _userManager.GetRolesAsync(Model))
+                        @role
+                        }</dd>
+                    <dt class="fs-4">User name:</dt>
+                    <dd class="fs-6">@Model.UserName</dd>
+                    <dt class="fs-4">Email:</dt>
+                    <dd class="fs-6">@Model.Email</dd>
+                    <dt class="fs-4">First name:</dt>
+                    <dd class="fs-6">@Model.FirstName</dd>
+                    <dt class="fs-4">Last name:</dt>
+                    <dd class="fs-6">@Model.LastName</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-secondary font-monospace" asp-action="Index">Back to List</a>
+</div>

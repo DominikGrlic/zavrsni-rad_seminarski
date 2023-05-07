@@ -110,10 +110,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 }
 
                 _context.Add(product);
-                //_context.Products.Add(product);          <--- jedna "od" varijanti za dodavanje u bazu
                 await _context.SaveChangesAsync();
-                //_context.SaveChanges();                  <--- kada nebi koristili "async" kodiranje
-                
 
 
                 // povezivanje product.Id sa categoryIds

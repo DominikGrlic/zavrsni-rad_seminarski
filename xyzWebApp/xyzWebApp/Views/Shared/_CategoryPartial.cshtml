@@ -4,7 +4,7 @@
 @inject ApplicationDbContext _context
 
 <div class="dropdown">
-    <a class="btn nav-link dropdown-toggle text-secondary" id="categoryDropdown" data-bs-toggle="dropdown">Categories</a>
+    <a class="btn nav-link dropdown-toggle text-warning" id="categoryDropdown" data-bs-toggle="dropdown">Categories</a>
     <ul class="dropdown-menu bg-dark">
         <li>
             @foreach(var cat in _context.Categories.ToList())

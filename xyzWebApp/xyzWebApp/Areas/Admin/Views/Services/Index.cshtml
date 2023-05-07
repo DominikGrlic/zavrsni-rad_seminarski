@@ -7,7 +7,7 @@
 <h1 class="font-monospace">All services</h1>
 
 <p>
-    <a asp-action="Create" class="font-monospace btn btn-secondary">Create New</a>
+    <a asp-action="Create" class="font-monospace text-light btn btn-warning">Create New</a>
 </p>
 <table class="table table-hover font-monospace text-center">
     <thead class="table-dark">
@@ -15,9 +15,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Price)
             </th>
@@ -30,9 +27,6 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>

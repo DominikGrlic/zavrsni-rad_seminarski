@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using xyzWebApp.Data;
 
@@ -11,9 +12,10 @@ using xyzWebApp.Data;
 namespace xyzWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230506175655__dataSeeding")]
+    partial class _dataSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,14 +54,14 @@ namespace xyzWebApp.Migrations
                         new
                         {
                             Id = "7a830b98-d453-441b-bf95-f97c7b79c81c",
-                            ConcurrencyStamp = "91a126ea-8e75-4804-a21c-60405c49cfbe",
+                            ConcurrencyStamp = "239a39a8-594f-4345-94ff-4e99b2f9249d",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "168d01bf-f3eb-49c5-8f52-35a05304c020",
-                            ConcurrencyStamp = "f1907d22-c43d-4e41-a191-13ced8e50306",
+                            ConcurrencyStamp = "c4767237-7dec-4a51-b5dc-ecf98ebec354",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -261,7 +263,7 @@ namespace xyzWebApp.Migrations
                         {
                             Id = "7023ed45-9bf9-4fb8-a7e8-30378c89d14d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6e3b36a8-9ca1-40e5-89fc-cac37f8652e7",
+                            ConcurrencyStamp = "c16e1928-4d3a-472d-962e-7aa53e9eddf2",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             FirstName = "Master",
@@ -269,9 +271,9 @@ namespace xyzWebApp.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOQPvIImwWznZtjUFzqOjqnZdarElw7bjix0OiCREYJV0l/ZshuNeWidT9o4sb1Qnw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELWIlhKU4TGc4E71G50MRmf8uxWdC0ou2Q0/L3vNbA9wW2sJ+LK/l3bQaoIARyGc4w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bfe3457f-8f67-48ad-80ef-2b143bf4c04a",
+                            SecurityStamp = "5654e3cf-9624-424b-ab1e-ea807b22881a",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com"
                         });
@@ -304,8 +306,8 @@ namespace xyzWebApp.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Massage's we offer.",
-                            Title = "Massage's"
+                            Description = "Offer of our massage's.",
+                            Title = "Massage"
                         },
                         new
                         {
@@ -330,12 +332,6 @@ namespace xyzWebApp.Migrations
                             Id = 5,
                             Description = "Bio friendly and skin healthy shampoo's",
                             Title = "Shampoo's"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Natural ingeredient toothpaste's made by hand.",
-                            Title = "Toothpaste's"
                         });
                 });
 
@@ -448,7 +444,7 @@ namespace xyzWebApp.Migrations
                         new
                         {
                             Id = 9,
-                            Image = "bergam_oil.jpg",
+                            Image = "bergam-oil.jpg",
                             InStock = 60m,
                             Price = 24.99m,
                             Sku = "OO0100",
@@ -504,80 +500,6 @@ namespace xyzWebApp.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 2,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 2,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 2,
-                            ProductId = 9
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 3,
-                            ProductId = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 3,
-                            ProductId = 4
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CategoryId = 3,
-                            ProductId = 5
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CategoryId = 3,
-                            ProductId = 11
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CategoryId = 4,
-                            ProductId = 6
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CategoryId = 4,
-                            ProductId = 7
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CategoryId = 4,
-                            ProductId = 12
-                        },
-                        new
-                        {
-                            Id = 11,
-                            CategoryId = 6,
-                            ProductId = 8
-                        },
-                        new
-                        {
-                            Id = 12,
-                            CategoryId = 6,
-                            ProductId = 10
-                        });
                 });
 
             modelBuilder.Entity("xyzWebApp.Models.Service", b =>
@@ -614,15 +536,13 @@ namespace xyzWebApp.Migrations
                         new
                         {
                             Id = 1,
-                            Image = "reflexo.jpg",
                             Price = 29.99m,
                             Sku = "SM2902",
-                            Title = "Reflexo therapy"
+                            Title = "Men's sports massage"
                         },
                         new
                         {
                             Id = 2,
-                            Image = "wome_mass.jpg",
                             Price = 39.99m,
                             Sku = "MC2222",
                             Title = "Women full body massage"
@@ -630,10 +550,9 @@ namespace xyzWebApp.Migrations
                         new
                         {
                             Id = 3,
-                            Image = "dry_needle.jpg",
                             Price = 44.99m,
                             Sku = "MM0440",
-                            Title = "Dry needle therapy"
+                            Title = "Maderotherapy"
                         });
                 });
 
@@ -658,26 +577,6 @@ namespace xyzWebApp.Migrations
                     b.HasIndex("ServiceId");
 
                     b.ToTable("ServiceCategories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            ServiceId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 1,
-                            ServiceId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 1,
-                            ServiceId = 3
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

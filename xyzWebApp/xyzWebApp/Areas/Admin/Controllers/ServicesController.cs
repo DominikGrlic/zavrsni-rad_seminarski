@@ -159,7 +159,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                     if(newImage != null)                        
                     {
                         var newImageName = DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + "_" +
-                            newImage.FileName.ToLower().Replace(" ", "_");               // spremamo unikatan naziv slike
+                            newImage.FileName.ToLower().Replace(" ", "_");               // spremamo naziv slike
                         
                         var saveImagePath = Path.Combine(
                             Directory.GetCurrentDirectory(),

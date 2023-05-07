@@ -29,6 +29,22 @@ namespace xyzWebApp.Areas.Admin.Controllers
             return View(_userManager.Users.ToList());
         }
 
+        public async Task<IActionResult> Details(string? id)
+        {
+            if (id == null || _userManager.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
         // GET: UsersController/Create
         [HttpGet]
         public ActionResult Create()

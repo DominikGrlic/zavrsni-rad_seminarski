@@ -128,11 +128,19 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 if(roles != 0)
                 {
                     if (roles == 2)
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, "Customer");
                         await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+                        
 
 
                     else if (roles == 1)
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, "Admin");
                         await _userManager.AddToRoleAsync(user, "Customer");
+                    }
+                        
 
                     else
                         ModelState.AddModelError("", "User role can't be recognised!");

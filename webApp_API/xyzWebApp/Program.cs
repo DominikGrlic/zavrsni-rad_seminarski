@@ -12,10 +12,10 @@ namespace xyzWebApp
         {
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
-
+            
             builder.Services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(connectionString));
-
+            
             builder.Services.AddDefaultIdentity<ApplicationUser>(
                 options => options.SignIn.RequireConfirmedAccount = false
                 ).AddRoles<IdentityRole>(      // Dodavanje uloga za korisnika -> IdentityRole <- identifikacija po ulozi

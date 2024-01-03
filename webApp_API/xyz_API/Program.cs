@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using xyz_API.Middlewares;
 using xyzWebApp.Data;
 
 namespace xyz_API
@@ -17,7 +19,15 @@ namespace xyz_API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+
             var app = builder.Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -32,6 +42,8 @@ namespace xyz_API
 
 
             app.MapControllers();
+
+            app.UseMiddleware<LogApiMiddleware>();
 
             app.Run();
         }

@@ -15,7 +15,15 @@ public class LogApiMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        LogRequest(context);
+        try
+        {
+            LogRequest(context);
+        }
+        catch (Exception ex)
+        {
+            await context.Response.WriteAsync(ex.ToString());
+        }
+        
 
         await _next(context);
     }
@@ -23,18 +31,17 @@ public class LogApiMiddleware
 
     private void LogRequest(HttpContext context)
     {
-        //var environment = _configuration.GetValue<string>("Environment");
 
         var logFilePath = _configuration.GetValue<string>($"Serilog:WriteTo:0:Args:path");
-
-        //var environmentLogFolder = environment == "Production" ? "Logs/Production" : "Logs/Development";
-        //var adjuctedLogFilePath = Path.Combine(environmentLogFolder, logFilePath);
 
         var ipAddress = context.Connection.RemoteIpAddress;
         var url = context.Request.Path;
         var queryMethods = context.Request.Method;
 
-        var logMsg = $"----->   |   IP address: {ipAddress}   |   - URL: {url}   |   - Query methods: {queryMethods}   |    - Server response code: {context.Response.StatusCode}  --->";
+        var parameters = context.Request.Query;
+        var paramsQuery = string.Join(",", parameters.Select(x => $"{x.Key}: {x.Value}"));
+
+        var logMsg = $"----->   |   IP address: {ipAddress}   |   - URL: {url}   |   - Query methods: {queryMethods}   |    - Server response code: {context.Response.StatusCode}  --->   |   - Query parameters: {paramsQuery}";
 
         Log.Logger = new LoggerConfiguration()
             .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Minute)

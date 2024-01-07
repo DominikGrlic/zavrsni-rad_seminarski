@@ -19,15 +19,11 @@ namespace xyz_API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Configuration
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
+            // new serilog config
+            builder.Host.UseSerilog((ctx, lc) => lc
+            .ReadFrom.Configuration(ctx.Configuration));
 
             var app = builder.Build();
-
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration)
-                .CreateLogger();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -36,14 +32,13 @@ namespace xyz_API
                 app.UseSwaggerUI();
             }
 
+            app.UseMiddleware<LoggerMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
-
             app.MapControllers();
-
-            app.UseMiddleware<LogApiMiddleware>();
 
             app.Run();
         }

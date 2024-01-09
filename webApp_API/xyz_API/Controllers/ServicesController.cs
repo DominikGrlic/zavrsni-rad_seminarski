@@ -86,12 +86,16 @@ namespace xyz_API.Controllers
         [HttpPost]
         public async Task<ActionResult<Service>> PostService(Service service)
         {
-          if (_context.Services == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Services'  is null.");
-          }
-            _context.Services.Add(service);
-            await _context.SaveChangesAsync();
+            if (_context.Services == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Services'  is null.");
+            }
+
+            if(ModelState.IsValid)
+            {
+                _context.Services.Add(service);
+                await _context.SaveChangesAsync();
+            }
 
             return CreatedAtAction("GetService", new { id = service.Id }, service);
         }

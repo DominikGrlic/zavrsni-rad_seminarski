@@ -9,9 +9,9 @@
         <li>
             @foreach(var cat in _context.Categories.ToList())
             {
-                <a class="dropdown-item bg-dark text-white" type="button" asp-action="ProductsByCategories" asp-route-id="@cat.Id">
-                    @cat.Title
-                </a>
+                @* <a class="dropdown-item bg-dark text-white" type="button" asp-action="ProductsByCategories" asp-route-id="@cat.Id"> *@
+                @*     @cat.Title *@
+                @* </a> *@
             }
         </li>
     </ul>

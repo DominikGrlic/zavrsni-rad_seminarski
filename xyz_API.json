@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "374c6863-4bb9-4599-89f4-3406454379e6",
+		"name": "My Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32236420"
+	},
+	"item": [
+		{
+			"name": "Authentification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Username\": \"ivan_seller\",\r\n    \"Password\": \"My_short_password_is_this_one_keep_it_safe_plz\"\r\n}\r\n//{\r\n//    \"Username\": \"marko_buyer\",\r\n //   \"Password\": \"My_short_password_is_this_one_keep_it_safe_plz\"\r\n//}{\r\n //   \"Username\": \"luka_admin\",\r\n //   \"Password\": \"My_short_password_is_this_one_keep_it_safe_plz\"\r\n//}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7106/api/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7106",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authorization",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Imx1a2FfYWRtaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJsdWthLmFkbWluQGVtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2dpdmVubmFtZSI6Ikx1a2EiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbmlzdHJhdG9yIiwiZXhwIjoxNzA1MjQ5ODA2LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTA2IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzEwNiJ9.yUD1-cgn1dDVSg94zPU3pBqO9Wn6_9F2ata0InmcnPc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7106/api/user/seller",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7106",
+					"path": [
+						"api",
+						"user",
+						"seller"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

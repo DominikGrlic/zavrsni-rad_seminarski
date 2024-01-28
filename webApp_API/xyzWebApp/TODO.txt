@@ -1,0 +1,1 @@
+﻿2. Ako odem na Forgot password, trebao bih dobiti na mail link na kojeg mogu resetirati email. To mi ne radi. Istraži zašto i riješi da proradi.

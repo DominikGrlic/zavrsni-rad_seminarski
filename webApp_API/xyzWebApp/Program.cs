@@ -17,13 +17,12 @@ namespace xyzWebApp
                 options => options.UseSqlServer(connectionString));
             
             builder.Services.AddDefaultIdentity<ApplicationUser>(
-                options => options.SignIn.RequireConfirmedAccount = false
-                ).AddRoles<IdentityRole>(      // Dodavanje uloga za korisnika -> IdentityRole <- identifikacija po ulozi
-                ).AddEntityFrameworkStores<ApplicationDbContext>();
+                options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
@@ -39,19 +38,25 @@ namespace xyzWebApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            // postavke aplikacije za rukovanje decimalnim vrijednostima
-            var ci = new CultureInfo("de-De");
-            ci.NumberFormat.NumberDecimalSeparator = ".";
-            ci.NumberFormat.CurrencyDecimalSeparator = ".";
+            // app settings for handling decimal numbers
+            var ci = new CultureInfo("de-De")
+            {
+                NumberFormat =
+                {
+                    NumberDecimalSeparator = ".",
+                    CurrencyDecimalSeparator = "."
+                }
+            };
 
+            // using localization for currency settings
             app.UseRequestLocalization(
-                    new RequestLocalizationOptions
-                    {
-                        DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(ci),
-                        SupportedCultures = new List<CultureInfo> { ci },
-                        SupportedUICultures = new List<CultureInfo> { ci }
-                    }
-                );
+                new RequestLocalizationOptions
+                {
+                    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(ci),
+                    SupportedCultures = new List<CultureInfo> { ci },
+                    SupportedUICultures = new List<CultureInfo> { ci }
+                }
+            );
 
             app.UseRouting();
             app.UseAuthentication();;

@@ -8,13 +8,19 @@ namespace xyz_API.Controllers;
 [Route("api/[controller]")]
 public class UserController : Controller
 {
+    private readonly ILogger<UserController> _logger;
+    public UserController(ILogger<UserController> logger)
+    {
+        _logger = logger;
+    }
+    
     [HttpGet("Admin")]
     [Authorize(Roles = "Administrator")]
     public IActionResult AdminEndpoint()
     {
         var currentUser = GetCurrentUser();
 
-        return Ok($"Hi {currentUser.GivenName}, you are an {currentUser.Role}");
+        return Ok($"Hi {currentUser.GivenName}, you are {currentUser.Role}");
     }
     
     [HttpGet("Seller")]
@@ -23,7 +29,7 @@ public class UserController : Controller
     {
         var currentUser = GetCurrentUser();
 
-        return Ok($"Hi {currentUser.GivenName}, you are an {currentUser.Role}");
+        return Ok($"Hi {currentUser.GivenName}, you are {currentUser.Role}");
     }
     
     [HttpGet("Buyer")]
@@ -32,7 +38,7 @@ public class UserController : Controller
     {
         var currentUser = GetCurrentUser();
 
-        return Ok($"Hi {currentUser.GivenName}, you are an {currentUser.Role}");
+        return Ok($"Hi {currentUser.GivenName}, you are {currentUser.Role}");
     }
     
     

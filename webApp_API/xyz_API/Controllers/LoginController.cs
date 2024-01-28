@@ -12,7 +12,7 @@ namespace xyz_API.Controllers
     [Route("api/[controller]")]
     public class LoginController : Controller
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
 
         public LoginController(IConfiguration config)
         {
@@ -25,19 +25,17 @@ namespace xyz_API.Controllers
         {
             var user = Authenticate(userLogin);
 
-            if (user != null)
-            {
-                var token = Generate(user);
-                return Ok(token);
-            }
-
-            return NotFound("User not found");
+            if (user == null) 
+                return NotFound("User not found");
+            
+            var token = Generate(user);
+            return Ok(token);
         }
 
         private string Generate(UserModel user)
         {
             
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"] ?? throw new InvalidOperationException()));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             
             var claims = new[]

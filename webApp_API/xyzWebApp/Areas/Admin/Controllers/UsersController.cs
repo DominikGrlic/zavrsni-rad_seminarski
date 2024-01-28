@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
 using xyzWebApp.Areas.Identity.Data;
 using xyzWebApp.Models;
 
@@ -218,5 +215,19 @@ namespace xyzWebApp.Areas.Admin.Controllers
 
             return RedirectToAction("Index");
         }
+
+        // [HttpPost]
+        // [AllowAnonymous]
+        // public async Task<IActionResult> ForgotPassword([Required] string email)
+        // {
+        //     var user = await _userManager.FindByEmailAsync(email);
+        //     if (user != null)
+        //     {
+        //         var token = _userManager.GeneratePasswordResetTokenAsync(user);
+        //         var passwordLink = Url.Action("ForgotPassword", "Users", new { token, email = user.Email }, Request.Scheme);
+        //         var message = new Message(new string[] { user.Email! }, "Confirmation email link", passwordLink);
+        //         
+        //     }
+        // }
     }
 }

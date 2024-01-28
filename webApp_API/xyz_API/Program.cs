@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using System.Configuration;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using xyz_API.Middlewares;
 using xyzWebApp.Data;
 
@@ -17,7 +17,7 @@ namespace xyz_API
 
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-
+            
             // JWT Authentication Configuration
             builder.Services.AddAuthentication(options =>
             {
@@ -39,6 +39,9 @@ namespace xyz_API
 
                 };
             });
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(10));
+            
             builder.Services.AddAuthorization();
 
             builder.Services.AddMvc();

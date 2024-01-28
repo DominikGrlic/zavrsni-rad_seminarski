@@ -2,23 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 using xyzWebApp.Areas.Identity.Data;
+using xyzWebApp.Classes;
 
 namespace xyzWebApp.Areas.Identity.Pages.Account
 {
@@ -29,7 +22,6 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
 
         private readonly RoleManager<IdentityRole> _roleManager;
 
@@ -38,7 +30,6 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -46,7 +37,6 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
             _roleManager = roleManager;
         }
 
@@ -107,7 +97,7 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
             [DataType(DataType.Text)]
             [Display(Name ="First name")]
             public string FirstName { get; set; }
-                                                            // dodana obavezna svojstva usera
+                                                      
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Last name")]
@@ -129,7 +119,7 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                user.FirstName = Input.FirstName;                   // dodjela svojstva user-u
+                user.FirstName = Input.FirstName; 
                 user.LastName = Input.LastName;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -142,8 +132,8 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
                                                                                         
                     if(customerRole != null)
                     {
-                        await _userManager.AddToRoleAsync(user, customerRole.Name);           // ako postoji "Customer" rola, tamo dodaj 
-                    }                                                                         //  -->  ovog trenutnog(novog) usera  <--
+                        await _userManager.AddToRoleAsync(user, customerRole.Name);       // adding role to a new user 
+                    }                                                                         
 
                     _logger.LogInformation("User created a new account with password.");
 
@@ -153,22 +143,21 @@ namespace xyzWebApp.Areas.Identity.Pages.Account
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        values: new { area = "Identity", userId, code, returnUrl },
                         protocol: Request.Scheme);
+                    
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var link = HtmlEncoder.Default.Encode(callbackUrl);
+
+                    var resp = await EmailHelper.SendEmailConfirm(Input.Email, Input.FirstName, link);
+                    Console.WriteLine(resp);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
                     }
                 }
+                
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

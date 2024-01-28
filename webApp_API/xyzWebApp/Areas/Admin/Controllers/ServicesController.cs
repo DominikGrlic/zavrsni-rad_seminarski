@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using xyzWebApp.Data;
 using xyzWebApp.Models;
@@ -80,7 +75,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                     var imageName = Image.FileName.ToLower();
                     var saveImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/services", imageName);
 
-                    Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+                    Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath) ?? string.Empty);
 
                     using (var stream = new FileStream(saveImagePath, FileMode.Create))
                         Image.CopyTo(stream);
@@ -125,7 +120,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            ViewBag.ErrorMsg = TempData["ErrorMsg"];
+            ViewBag.ErrorMsg = TempData["ErrorMsg"] ?? string.Empty;
 
             return View(service);
         }
@@ -167,7 +162,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                             newImageName
                             );
 
-                        Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath));
+                        Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath) ?? string.Empty);
 
                         using (var stream = new FileStream(saveImagePath, FileMode.Create))
                         {

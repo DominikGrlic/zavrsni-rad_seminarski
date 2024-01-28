@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using xyzWebApp.Data;
@@ -10,6 +6,7 @@ using xyzWebApp.Models;
 
 namespace xyz_API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ServicesController : ControllerBase
@@ -22,24 +19,18 @@ namespace xyz_API.Controllers
         }
 
         // GET: api/Services
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Service>>> GetServices()
         {
-          if (_context.Services == null)
-          {
-              return NotFound();
-          }
             return await _context.Services.ToListAsync();
         }
 
         // GET: api/Services/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Service>> GetService(int id)
         {
-          if (_context.Services == null)
-          {
-              return NotFound();
-          }
             var service = await _context.Services.FindAsync(id);
 
             if (service == null)
@@ -52,9 +43,11 @@ namespace xyz_API.Controllers
 
         // PUT: api/Services/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator, Seller")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutService(int id, Service service)
         {
+            
             if (id != service.Id)
             {
                 return BadRequest();
@@ -78,36 +71,38 @@ namespace xyz_API.Controllers
                 }
             }
 
-            return NoContent();
+            return Accepted();
         }
 
         // POST: api/Services
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Administrator, Seller")]
         [HttpPost]
         public async Task<ActionResult<Service>> PostService(Service service)
         {
-            if (_context.Services == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Services'  is null.");
-            }
-
             if(ModelState.IsValid)
             {
-                _context.Services.Add(service);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Services.Add(service);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw;
+                }
+                
             }
 
             return CreatedAtAction("GetService", new { id = service.Id }, service);
         }
 
         // DELETE: api/Services/5
+        [Authorize(Roles = "Administrator, Seller")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteService(int id)
         {
-            if (_context.Services == null)
-            {
-                return NotFound();
-            }
             var service = await _context.Services.FindAsync(id);
             if (service == null)
             {
@@ -117,7 +112,7 @@ namespace xyz_API.Controllers
             _context.Services.Remove(service);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Accepted();
         }
 
         private bool ServiceExists(int id)

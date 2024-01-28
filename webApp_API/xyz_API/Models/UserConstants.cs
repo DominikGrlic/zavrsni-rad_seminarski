@@ -1,8 +1,9 @@
 namespace xyz_API.Models;
 
-public class UserConstants
+public static class UserConstants
 {
-    public static List<UserModel> Users = new List<UserModel>()
+    // - made class 'static' and users list 'readonly'
+    public static readonly List<UserModel> Users = new()
     {
         new UserModel()
         {

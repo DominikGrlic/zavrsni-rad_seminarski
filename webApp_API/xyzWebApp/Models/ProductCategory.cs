@@ -5,7 +5,6 @@ namespace xyzWebApp.Models;
 
 public class ProductCategory
 {
-
     [Key]
     public int Id { get; set; }
 

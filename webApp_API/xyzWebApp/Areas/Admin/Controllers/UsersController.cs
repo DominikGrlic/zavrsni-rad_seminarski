@@ -148,7 +148,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                 }
 
 
-                if(!String.IsNullOrEmpty(email) && !String.IsNullOrEmpty(password) && !String.IsNullOrEmpty(firstName) && !                 String.IsNullOrEmpty(lastName))
+                if(!String.IsNullOrEmpty(email) && !String.IsNullOrEmpty(password) && !String.IsNullOrEmpty(firstName) && !String.IsNullOrEmpty(lastName))
                 {
                     var result = await _userManager.UpdateAsync(user);
 

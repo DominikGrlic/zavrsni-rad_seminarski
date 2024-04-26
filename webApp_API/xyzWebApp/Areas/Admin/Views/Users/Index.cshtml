@@ -3,7 +3,7 @@
 @using xyzWebApp.Areas.Identity.Data;
 @using Microsoft.AspNetCore.Identity;
 
-@inject UserManager<ApplicationUser> _userManager
+@inject UserManager<ApplicationUser> UserManager
 
 <h1 class="text font-monospace">All Users</h1>
 <a asp-action="Create" class="btn btn-warning text-light font-monospace">Create a User</a>
@@ -23,7 +23,7 @@
     {
         <tr class="text-center">
             <td>@{
-                    foreach(var role in await _userManager.GetRolesAsync(user))
+                    foreach(var role in await UserManager.GetRolesAsync(user))
                     {
                         @role
                     }

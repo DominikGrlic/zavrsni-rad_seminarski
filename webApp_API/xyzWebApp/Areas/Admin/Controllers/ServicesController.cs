@@ -78,7 +78,9 @@ namespace xyzWebApp.Areas.Admin.Controllers
                     Directory.CreateDirectory(Path.GetDirectoryName(saveImagePath) ?? string.Empty);
 
                     using (var stream = new FileStream(saveImagePath, FileMode.Create))
+                    {
                         Image.CopyTo(stream);
+                    }
 
                     service.Image = imageName;
                 }
@@ -88,7 +90,7 @@ namespace xyzWebApp.Areas.Admin.Controllers
                     return RedirectToAction(nameof(Create));
                 }
 
-                    _context.Services.Add(service);
+                _context.Services.Add(service);
                 await _context.SaveChangesAsync();
                 
 
